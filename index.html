@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduTools Portal — Interactive Educational Suite</title>
+  <meta name="description" content="Unified dashboard and launchpad for the EduTools interactive classroom suite: WordCloud, Pin Board, Padlet, Mind Map, Spin the Wheel, and Live Poll." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.25s ease-out forwards',
+            'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(16px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- QRCode Generator (standalone client-side) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.5);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(107, 114, 128, 0.8);
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(75, 85, 99, 0.6);
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(107, 114, 128, 0.9);
+    }
+
+    /* Glassmorphism effects */
+    .glass {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    /* Card glow subtle gradient */
+    .card-hover-effect {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-hover-effect:hover {
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-30 glass border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Brand -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-lg p-1">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform duration-200">
+          <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-brand-700 to-indigo-600 dark:from-white dark:via-brand-200 dark:to-indigo-300">
+            EduTools Hub
+          </span>
+          <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+            Suite
+          </span>
+        </div>
+      </a>
+
+      <!-- Quick Search Bar (in header) -->
+      <div class="hidden md:flex flex-1 max-w-md mx-4 relative">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input
+            id="nav-search-input"
+            type="text"
+            placeholder="Search tools, topics, tags... (Press '/' to focus)"
+            class="w-full pl-10 pr-10 py-2 rounded-xl text-sm bg-slate-100/90 dark:bg-slate-900 border border-transparent dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 focus:border-brand-500 dark:focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          />
+          <kbd class="hidden lg:inline-flex items-center gap-0.5 absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300/60 dark:border-slate-700 pointer-events-none">
+            /
+          </kbd>
+          <button id="nav-search-clear" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2">
+        <!-- Favorites Filter Quick Toggle -->
+        <button
+          id="favorites-toggle-btn"
+          title="Toggle Favorites Only"
+          class="relative p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+        >
+          <i data-lucide="star" class="w-5 h-5 transition-transform duration-200 hover:scale-110"></i>
+          <span id="favorites-badge-count" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-amber-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+            0
+          </span>
+        </button>
+
+        <!-- Dark / Light Mode Toggle -->
+        <button
+          id="theme-toggle-btn"
+          title="Switch theme"
+          class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+        >
+          <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+
+        <!-- External GitHub Profile / Link -->
+        <a
+          href="https://github.com/ericpang"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="View creator GitHub"
+          class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+        >
+          <i data-lucide="github" class="w-5 h-5"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= HERO BANNER ================= -->
+  <section class="relative overflow-hidden pt-10 pb-8 sm:pt-14 sm:pb-10 border-b border-slate-200/60 dark:border-slate-800/60">
+    <!-- Background subtle gradient glow -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-brand-500/15 via-purple-500/10 to-indigo-500/15 blur-3xl rounded-full"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200/80 dark:border-brand-800/80 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-4 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>6 Active Interactive Classroom Apps</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-3xl mx-auto leading-tight">
+        Interactive Educational Tools for Modern Classrooms
+      </h1>
+
+      <p class="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Launch, project, or embed collaborative activities in seconds. Free, web-based, and built for engaging students everywhere.
+      </p>
+
+      <!-- Mobile Search Bar (visible on mobile only) -->
+      <div class="mt-6 md:hidden max-w-md mx-auto relative px-2">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input
+            id="mobile-search-input"
+            type="text"
+            placeholder="Search tools, topics, tags..."
+            class="w-full pl-10 pr-10 py-2.5 rounded-xl text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 shadow-sm"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FILTERING & CONTROLS ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 w-full">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-4">
+      
+      <!-- Category Filter Tabs -->
+      <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none" id="category-pills">
+        <button data-cat="all" class="category-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-brand-600 text-white shadow-sm shadow-brand-500/20">
+          All Tools (<span id="count-all">6</span>)
+        </button>
+        <button data-cat="Collaboration" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
+          Collaboration (<span id="count-collaboration">2</span>)
+        </button>
+        <button data-cat="Brainstorming" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
+          Brainstorming (<span id="count-brainstorming">1</span>)
+        </button>
+        <button data-cat="Ideation" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
+          Ideation (<span id="count-ideation">1</span>)
+        </button>
+        <button data-cat="Gamification" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
+          Gamification (<span id="count-gamification">1</span>)
+        </button>
+        <button data-cat="Assessment" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
+          Assessment (<span id="count-assessment">1</span>)
+        </button>
+      </div>
+
+      <!-- Sort & Filter Status -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+        <div class="text-xs text-slate-500 dark:text-slate-400" id="results-count-text">
+          Showing 6 apps
+        </div>
+        
+        <select id="sort-select" class="text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500">
+          <option value="default">Default Order</option>
+          <option value="name-asc">Name (A → Z)</option>
+          <option value="name-desc">Name (Z → A)</option>
+          <option value="category">By Category</option>
+        </select>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= APPLICATION CARDS GRID ================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+    <div id="tools-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- App cards will be dynamically rendered here via JavaScript -->
+    </div>
+
+    <!-- Empty State (When no search matches) -->
+    <div id="empty-state" class="hidden py-16 text-center max-w-md mx-auto">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 mb-4 border border-slate-200 dark:border-slate-800">
+        <i data-lucide="search-x" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white">No tools found</h3>
+      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        We couldn't find any tool matching your search or category filters.
+      </p>
+      <button id="reset-filters-btn" class="mt-4 px-4 py-2 rounded-xl text-xs font-semibold bg-brand-600 text-white hover:bg-brand-700 transition shadow-sm">
+        Reset All Filters
+      </button>
+    </div>
+  </main>
+
+  <!-- ================= IN-APP MODAL (IFRAME VIEWER) ================= -->
+  <div id="app-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm transition-opacity duration-200 p-0 sm:p-4 md:p-6 flex flex-col items-center justify-center">
+    
+    <div class="w-full h-full max-w-7xl bg-white dark:bg-slate-900 rounded-none sm:rounded-2xl shadow-2xl flex flex-col border border-slate-200/80 dark:border-slate-800 overflow-hidden relative animate-slide-up">
+      
+      <!-- Modal Header Bar -->
+      <div class="h-14 px-4 bg-slate-100/90 dark:bg-slate-950/90 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-3 overflow-hidden">
+          <div id="modal-app-icon" class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-sm">
+            <!-- Icon -->
+          </div>
+          <div class="overflow-hidden">
+            <div class="flex items-center gap-2">
+              <h2 id="modal-app-title" class="text-sm font-bold text-slate-900 dark:text-white truncate">App Title</h2>
+              <span id="modal-app-category" class="hidden sm:inline-block text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                Category
+              </span>
+            </div>
+            <p id="modal-app-url" class="text-[11px] font-mono text-slate-500 dark:text-slate-400 truncate max-w-xs sm:max-w-md">https://...</p>
+          </div>
+        </div>
+
+        <!-- Modal Controls -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <!-- Refresh Iframe -->
+          <button id="modal-refresh-btn" title="Refresh Application" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition">
+            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+          </button>
+          
+          <!-- Open in New Tab -->
+          <a id="modal-open-external-btn" href="#" target="_blank" rel="noopener noreferrer" title="Open in New Tab" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+          </a>
+
+          <!-- Fullscreen Toggle -->
+          <button id="modal-fullscreen-btn" title="Toggle Fullscreen" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition">
+            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+          </button>
+
+          <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-700 mx-1"></div>
+
+          <!-- Close Modal -->
+          <button id="modal-close-btn" title="Close (Esc)" class="p-2 rounded-lg text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (Iframe container) -->
+      <div class="flex-1 relative bg-slate-900 overflow-hidden">
+        
+        <!-- Loading Spinner -->
+        <div id="modal-loader" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900 text-slate-500 transition-opacity duration-300">
+          <div class="w-10 h-10 border-3 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+          <span class="mt-3 text-xs font-medium text-slate-600 dark:text-slate-400">Loading EduTool application...</span>
+        </div>
+
+        <!-- The actual iframe -->
+        <iframe
+          id="modal-iframe"
+          src=""
+          class="w-full h-full border-0 bg-white"
+          allow="camera; microphone; fullscreen; clipboard-read; clipboard-write;"
+          loading="lazy"
+        ></iframe>
+
+      </div>
+      
+      <!-- Fallback bar if iframe cannot load or is restricted -->
+      <div class="px-4 py-2 bg-amber-50 dark:bg-amber-950/40 border-t border-amber-200 dark:border-amber-900/60 flex items-center justify-between text-xs text-amber-800 dark:text-amber-200">
+        <div class="flex items-center gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0"></i>
+          <span>Having display issues or interactive lag?</span>
+        </div>
+        <a id="modal-fallback-link" href="#" target="_blank" rel="noopener noreferrer" class="font-bold underline hover:text-amber-900 dark:hover:text-amber-100 inline-flex items-center gap-1">
+          Open directly in a new window <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= QR CODE SHARE MODAL ================= -->
+  <div id="qr-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm transition-opacity duration-200 p-4 flex items-center justify-center">
+    <div class="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-200 dark:border-slate-800 animate-slide-up text-center relative">
+      <button id="qr-modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div id="qr-modal-icon" class="w-12 h-12 mx-auto rounded-xl flex items-center justify-center text-white mb-3 shadow-md">
+        <!-- App icon -->
+      </div>
+
+      <h3 id="qr-modal-title" class="text-lg font-bold text-slate-900 dark:text-white">Scan QR Code</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">
+        Project or scan with a smartphone camera to launch directly on student devices.
+      </p>
+
+      <!-- QR Container -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 dark:border-slate-800 inline-block shadow-inner mx-auto mb-4">
+        <div id="qrcode" class="flex justify-center items-center"></div>
+      </div>
+
+      <p id="qr-modal-url" class="text-xs font-mono text-slate-500 dark:text-slate-400 break-all px-2 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg mb-4 select-all">
+        https://...
+      </p>
+
+      <div class="flex items-center gap-2">
+        <button id="qr-copy-btn" class="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Link
+        </button>
+        <a id="qr-launch-btn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition shadow-sm">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Launch
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING TOAST NOTIFICATION ================= -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-slate-800 dark:border-slate-200 text-xs font-semibold">
+    <i id="toast-icon" data-lucide="check-circle" class="w-4 h-4 text-emerald-400 dark:text-emerald-600 shrink-0"></i>
+    <span id="toast-msg">Action completed</span>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-8 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800 dark:text-slate-200">EduTools Portal</span>
+        <span>•</span>
+        <span>Curated interactive suite for active classroom learning</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <span>Press <kbd class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-[10px] border border-slate-300 dark:border-slate-700">/</kbd> to search</span>
+        <span>•</span>
+        <a href="https://github.com/ericpang" target="_blank" rel="noopener noreferrer" class="hover:text-brand-600 dark:hover:text-brand-400 transition underline underline-offset-2">
+          Created by Eric Pang
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= APPLICATION LOGIC ================= -->
+  <script>
+    // EduTools Dataset
+    const EDU_TOOLS = [
+      {
+        id: "wordcloud",
+        title: "WordCloud",
+        category: "Brainstorming",
+        url: "https://ericpang.github.io/edutools_wordcloud",
+        description: "Dynamic visual word cloud generator. Ideal for brainstorming vocabulary, polling initial reactions, and visualizing text frequency.",
+        icon: "cloud",
+        color: "from-teal-500 to-emerald-600",
+        badgeColor: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
+        tags: ["Brainstorming", "Vocabulary", "Visualization", "Word Frequency"]
+      },
+      {
+        id: "pinboard",
+        title: "Pin Board",
+        category: "Collaboration",
+        url: "https://ericpang.github.io/edutools_pinboard/",
+        description: "Virtual corkboard with draggable sticky notes. Great for ideation sessions, grouping thoughts, and organizing classroom takeaways.",
+        icon: "pin",
+        color: "from-amber-500 to-orange-600",
+        badgeColor: "bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border-amber-200 dark:border-amber-800",
+        tags: ["Collaboration", "Sticky Notes", "Teamwork", "Ideation"]
+      },
+      {
+        id: "padlet",
+        title: "Padlet",
+        category: "Collaboration",
+        url: "https://ericpang.github.io/edutools_padlet/",
+        description: "Multimedia collaborative bulletin board. Allows students and teachers to curate notes, share reflections, and post interactive cards.",
+        icon: "layout-grid",
+        color: "from-rose-500 to-pink-600",
+        badgeColor: "bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border-rose-200 dark:border-rose-800",
+        tags: ["Collaboration", "Discussions", "Bulletin Board", "Media"]
+      },
+      {
+        id: "mindmap",
+        title: "Mind Map",
+        category: "Ideation",
+        url: "https://ericpang.github.io/edutools_mindmap",
+        description: "Intuitive node-based concept mapping tool. Help students visually structure complex subjects, break down essays, and connect ideas.",
+        icon: "git-fork",
+        color: "from-indigo-500 to-violet-600",
+        badgeColor: "bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800",
+        tags: ["Ideation", "Concept Map", "Structure", "Visual Thinking"]
+      },
+      {
+        id: "spinthewheel",
+        title: "Spin the Wheel",
+        category: "Gamification",
+        url: "https://ericpang.github.io/edutools_spinthewheel/",
+        description: "Customizable high-energy random picker wheel. Perfect for student selection, trivia turns, raffle games, and fun classroom decisions.",
+        icon: "disc",
+        color: "from-fuchsia-500 to-purple-600",
+        badgeColor: "bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-950/80 dark:text-fuchsia-300 border-fuchsia-200 dark:border-fuchsia-800",
+        tags: ["Gamification", "Randomizer", "Activities", "Classroom Games"]
+      },
+      {
+        id: "livepoll",
+        title: "Live Poll",
+        category: "Assessment",
+        url: "https://ericpang.github.io/edutools_livepoll/",
+        description: "Real-time audience polling tool with instant graphs. Conduct formative checks, pulse-checks, and classroom votes in real-time.",
+        icon: "bar-chart-3",
+        color: "from-blue-500 to-cyan-600",
+        badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border-blue-200 dark:border-blue-800",
+        tags: ["Assessment", "Live Polling", "Feedback", "Voting"]
+      }
+    ];
+
+    // State
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let sortBy = 'default';
+    let favoritesOnly = false;
+    let favorites = new Set();
+    let qrcodeInstance = null;
+
+    // Load favorites from localStorage
+    function loadFavorites() {
+      try {
+        const saved = localStorage.getItem('edutools_favorites');
+        if (saved) {
+          favorites = new Set(JSON.parse(saved));
+        }
+      } catch (e) {
+        console.error('Failed to load favorites', e);
+      }
+      updateFavoritesBadge();
+    }
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem('edutools_favorites', JSON.stringify(Array.from(favorites)));
+      } catch (e) {
+        console.error('Failed to save favorites', e);
+      }
+      updateFavoritesBadge();
+    }
+
+    function toggleFavorite(toolId, e) {
+      if (e) e.stopPropagation();
+      if (favorites.has(toolId)) {
+        favorites.delete(toolId);
+        showToast('Removed from favorites', 'star-off');
+      } else {
+        favorites.add(toolId);
+        showToast('Added to favorites', 'star');
+      }
+      saveFavorites();
+      renderGrid();
+    }
+
+    function updateFavoritesBadge() {
+      const badge = document.getElementById('favorites-badge-count');
+      const btn = document.getElementById('favorites-toggle-btn');
+      if (favorites.size > 0) {
+        badge.textContent = favorites.size;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+
+      if (favoritesOnly) {
+        btn.classList.add('bg-amber-100', 'text-amber-600', 'dark:bg-amber-950/60', 'dark:text-amber-400');
+      } else {
+        btn.classList.remove('bg-amber-100', 'text-amber-600', 'dark:bg-amber-950/60', 'dark:text-amber-400');
+      }
+    }
+
+    // Theme Management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('edutools_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('edutools_theme', isDark ? 'dark' : 'light');
+        lucide.createIcons();
+      });
+    }
+
+    // Toast System
+    let toastTimeout = null;
+    function showToast(message, iconName = 'check-circle') {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toast-msg');
+      const iconEl = document.getElementById('toast-icon');
+
+      msgEl.textContent = message;
+      iconEl.setAttribute('data-lucide', iconName);
+      lucide.createIcons();
+
+      clearTimeout(toastTimeout);
+      toast.classList.remove('translate-y-10', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-10', 'opacity-0', 'pointer-events-none');
+      }, 2400);
+    }
+
+    // Filter & Sort Logic
+    function getFilteredTools() {
+      return EDU_TOOLS.filter(tool => {
+        // Favorites filter
+        if (favoritesOnly && !favorites.has(tool.id)) {
+          return false;
+        }
+
+        // Category filter
+        if (currentCategory !== 'all' && tool.category.toLowerCase() !== currentCategory.toLowerCase()) {
+          return false;
+        }
+
+        // Search query
+        if (searchQuery.trim() !== '') {
+          const q = searchQuery.toLowerCase().trim();
+          const matchesTitle = tool.title.toLowerCase().includes(q);
+          const matchesDesc = tool.description.toLowerCase().includes(q);
+          const matchesCategory = tool.category.toLowerCase().includes(q);
+          const matchesTags = tool.tags.some(tag => tag.toLowerCase().includes(q));
+          if (!matchesTitle && !matchesDesc && !matchesCategory && !matchesTags) {
+            return false;
+          }
+        }
+
+        return true;
+      }).sort((a, b) => {
+        if (sortBy === 'name-asc') return a.title.localeCompare(b.title);
+        if (sortBy === 'name-desc') return b.title.localeCompare(a.title);
+        if (sortBy === 'category') return a.category.localeCompare(b.category);
+        return 0; // default order
+      });
+    }
+
+    // Render Grid
+    function renderGrid() {
+      const grid = document.getElementById('tools-grid');
+      const emptyState = document.getElementById('empty-state');
+      const resultsCountText = document.getElementById('results-count-text');
+      
+      const filtered = getFilteredTools();
+      
+      resultsCountText.textContent = `Showing ${filtered.length} of ${EDU_TOOLS.length} apps`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(tool => {
+        const isFav = favorites.has(tool.id);
+        return `
+          <div class="card-hover-effect bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-700 transition-all group relative overflow-hidden">
+            
+            <!-- Top Card Header -->
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-4">
+                
+                <!-- Icon with Gradient Background -->
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr ${tool.color} flex items-center justify-center text-white shadow-md shadow-indigo-500/10 group-hover:scale-105 transition-transform duration-200">
+                  <i data-lucide="${tool.icon}" class="w-6 h-6"></i>
+                </div>
+
+                <!-- Right Actions: Category & Favorite Star -->
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full border ${tool.badgeColor}">
+                    ${tool.category}
+                  </span>
+                  
+                  <button
+                    onclick="toggleFavorite('${tool.id}', event)"
+                    title="${isFav ? 'Remove from favorites' : 'Add to favorites'}"
+                    class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition focus:outline-none"
+                  >
+                    <i data-lucide="star" class="w-4 h-4 ${isFav ? 'fill-amber-400 text-amber-500' : ''}"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Title & Description -->
+              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                ${tool.title}
+              </h3>
+              
+              <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
+                ${tool.description}
+              </p>
+
+              <!-- Tags -->
+              <div class="mt-4 flex flex-wrap gap-1.5">
+                ${tool.tags.map(tag => `
+                  <button
+                    onclick="filterByTag('${tag}')"
+                    class="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950 dark:hover:text-brand-300 transition"
+                  >
+                    #${tag}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Bottom Action Buttons -->
+            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
+              
+              <!-- Primary Embed Launch -->
+              <button
+                onclick="openAppModal('${tool.id}')"
+                class="flex-1 py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm shadow-brand-500/20 active:scale-95 transition"
+              >
+                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i> Open App
+              </button>
+
+              <!-- Open in New Tab -->
+              <a
+                href="${tool.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Launch in New Tab"
+                class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
+              >
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+
+              <!-- QR Code Share -->
+              <button
+                onclick="openQrModal('${tool.id}')"
+                title="Show QR Code for Classroom Projection"
+                class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
+              >
+                <i data-lucide="qr-code" class="w-4 h-4"></i>
+              </button>
+
+              <!-- Copy Link -->
+              <button
+                onclick="copyToolLink('${tool.url}')"
+                title="Copy Direct Link"
+                class="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
+              >
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Quick tag filter
+    window.filterByTag = function(tag) {
+      searchQuery = tag;
+      document.getElementById('nav-search-input').value = tag;
+      document.getElementById('mobile-search-input').value = tag;
+      document.getElementById('nav-search-clear').classList.remove('hidden');
+      renderGrid();
+    };
+
+    // Copy link helper
+    window.copyToolLink = function(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Link copied to clipboard!', 'clipboard-check');
+      }).catch(() => {
+        showToast('Unable to copy link', 'alert-circle');
+      });
+    };
+
+    // Category button events
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-btn').forEach(b => {
+          b.classList.remove('active', 'bg-brand-600', 'text-white', 'shadow-sm', 'shadow-brand-500/20');
+          b.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'border', 'border-slate-200', 'dark:border-slate-800');
+        });
+        btn.classList.add('active', 'bg-brand-600', 'text-white', 'shadow-sm', 'shadow-brand-500/20');
+        btn.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'border', 'border-slate-200', 'dark:border-slate-800');
+
+        currentCategory = btn.dataset.cat;
+        renderGrid();
+      });
+    });
+
+    // Search events
+    const navSearch = document.getElementById('nav-search-input');
+    const mobileSearch = document.getElementById('mobile-search-input');
+    const clearSearch = document.getElementById('nav-search-clear');
+
+    function handleSearchInput(e) {
+      searchQuery = e.target.value;
+      navSearch.value = searchQuery;
+      mobileSearch.value = searchQuery;
+
+      if (searchQuery.length > 0) {
+        clearSearch.classList.remove('hidden');
+      } else {
+        clearSearch.classList.add('hidden');
+      }
+      renderGrid();
+    }
+
+    navSearch.addEventListener('input', handleSearchInput);
+    mobileSearch.addEventListener('input', handleSearchInput);
+
+    clearSearch.addEventListener('click', () => {
+      searchQuery = '';
+      navSearch.value = '';
+      mobileSearch.value = '';
+      clearSearch.classList.add('hidden');
+      renderGrid();
+    });
+
+    // Keyboard shortcut to search
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== navSearch && document.activeElement !== mobileSearch) {
+        e.preventDefault();
+        navSearch.focus();
+        navSearch.select();
+      } else if (e.key === 'Escape') {
+        closeAppModal();
+        closeQrModal();
+      }
+    });
+
+    // Reset filters
+    document.getElementById('reset-filters-btn').addEventListener('click', () => {
+      searchQuery = '';
+      currentCategory = 'all';
+      favoritesOnly = false;
+      navSearch.value = '';
+      mobileSearch.value = '';
+      clearSearch.classList.add('hidden');
+      document.querySelector('[data-cat="all"]').click();
+      updateFavoritesBadge();
+      renderGrid();
+    });
+
+    // Favorites filter toggle button
+    document.getElementById('favorites-toggle-btn').addEventListener('click', () => {
+      favoritesOnly = !favoritesOnly;
+      updateFavoritesBadge();
+      if (favoritesOnly) {
+        showToast('Showing favorites only', 'star');
+      }
+      renderGrid();
+    });
+
+    // Sort select
+    document.getElementById('sort-select').addEventListener('change', (e) => {
+      sortBy = e.target.value;
+      renderGrid();
+    });
+
+    // ================= MODAL LOGIC (IFRAME) =================
+    const modal = document.getElementById('app-modal');
+    const modalIframe = document.getElementById('modal-iframe');
+    const modalLoader = document.getElementById('modal-loader');
+    const modalTitle = document.getElementById('modal-app-title');
+    const modalCategory = document.getElementById('modal-app-category');
+    const modalUrl = document.getElementById('modal-app-url');
+    const modalIcon = document.getElementById('modal-app-icon');
+    const modalExternalBtn = document.getElementById('modal-open-external-btn');
+    const modalFallbackLink = document.getElementById('modal-fallback-link');
+
+    let currentModalTool = null;
+
+    window.openAppModal = function(toolId) {
+      const tool = EDU_TOOLS.find(t => t.id === toolId);
+      if (!tool) return;
+      currentModalTool = tool;
+
+      modalTitle.textContent = tool.title;
+      modalCategory.textContent = tool.category;
+      modalUrl.textContent = tool.url;
+      modalExternalBtn.href = tool.url;
+      modalFallbackLink.href = tool.url;
+
+      modalIcon.className = `w-8 h-8 rounded-lg bg-gradient-to-tr ${tool.color} flex items-center justify-center text-white shrink-0 shadow-sm`;
+      modalIcon.innerHTML = `<i data-lucide="${tool.icon}" class="w-4 h-4"></i>`;
+
+      modalLoader.style.display = 'flex';
+      modalLoader.style.opacity = '1';
+
+      modalIframe.src = tool.url;
+      modalIframe.onload = () => {
+        setTimeout(() => {
+          modalLoader.style.opacity = '0';
+          setTimeout(() => {
+            modalLoader.style.display = 'none';
+          }, 300);
+        }, 300);
+      };
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    };
+
+    function closeAppModal() {
+      modal.classList.add('hidden');
+      modalIframe.src = '';
+      document.body.style.overflow = '';
+      currentModalTool = null;
+    }
+
+    document.getElementById('modal-close-btn').addEventListener('click', closeAppModal);
+
+    document.getElementById('modal-refresh-btn').addEventListener('click', () => {
+      if (currentModalTool) {
+        modalLoader.style.display = 'flex';
+        modalLoader.style.opacity = '1';
+        modalIframe.src = currentModalTool.url;
+      }
+    });
+
+    // Fullscreen toggle
+    document.getElementById('modal-fullscreen-btn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        modal.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request failed", err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeAppModal();
+      }
+    });
+
+    // ================= QR CODE MODAL =================
+    const qrModal = document.getElementById('qr-modal');
+    const qrCloseBtn = document.getElementById('qr-modal-close');
+    const qrTitle = document.getElementById('qr-modal-title');
+    const qrIcon = document.getElementById('qr-modal-icon');
+    const qrUrl = document.getElementById('qr-modal-url');
+    const qrCopyBtn = document.getElementById('qr-copy-btn');
+    const qrLaunchBtn = document.getElementById('qr-launch-btn');
+    let currentQrUrl = '';
+
+    window.openQrModal = function(toolId) {
+      const tool = EDU_TOOLS.find(t => t.id === toolId);
+      if (!tool) return;
+
+      currentQrUrl = tool.url;
+      qrTitle.textContent = `${tool.title} QR Code`;
+      qrUrl.textContent = tool.url;
+      qrLaunchBtn.href = tool.url;
+
+      qrIcon.className = `w-12 h-12 mx-auto rounded-xl bg-gradient-to-tr ${tool.color} flex items-center justify-center text-white mb-3 shadow-md`;
+      qrIcon.innerHTML = `<i data-lucide="${tool.icon}" class="w-6 h-6"></i>`;
+
+      // Render QRCode
+      const qrcodeContainer = document.getElementById('qrcode');
+      qrcodeContainer.innerHTML = '';
+      new QRCode(qrcodeContainer, {
+        text: tool.url,
+        width: 180,
+        height: 180,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      qrModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    };
+
+    function closeQrModal() {
+      qrModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    qrCloseBtn.addEventListener('click', closeQrModal);
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) closeQrModal();
+    });
+
+    qrCopyBtn.addEventListener('click', () => {
+      if (currentQrUrl) {
+        copyToolLink(currentQrUrl);
+      }
+    });
+
+    // ================= INITIALIZATION =================
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      loadFavorites();
+      renderGrid();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
+

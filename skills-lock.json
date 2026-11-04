@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "popular-web-designs": {
+      "source": "nousresearch/hermes-agent",
+      "sourceType": "github",
+      "skillPath": "skills/creative/popular-web-designs/SKILL.md",
+      "computedHash": "6ec5c29bf824d259b7733efe4efe04de85034230230a096060c4599404b42769"
+    }
+  }
+}
