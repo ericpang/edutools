@@ -195,7 +195,7 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200/80 dark:border-brand-800/80 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-4 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>6 Active Interactive Classroom Apps</span>
+        <span id="hero-badge-count">7 Active Interactive Classroom Apps</span>
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-3xl mx-auto leading-tight">
@@ -228,7 +228,7 @@
       <!-- Category Filter Tabs -->
       <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none" id="category-pills">
         <button data-cat="all" class="category-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-brand-600 text-white shadow-sm shadow-brand-500/20">
-          All Tools (<span id="count-all">6</span>)
+          All Tools (<span id="count-all">7</span>)
         </button>
         <button data-cat="Collaboration" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
           Collaboration (<span id="count-collaboration">2</span>)
@@ -240,7 +240,7 @@
           Ideation (<span id="count-ideation">1</span>)
         </button>
         <button data-cat="Gamification" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
-          Gamification (<span id="count-gamification">1</span>)
+          Gamification (<span id="count-gamification">2</span>)
         </button>
         <button data-cat="Assessment" class="category-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800">
           Assessment (<span id="count-assessment">1</span>)
@@ -497,6 +497,17 @@
         color: "from-blue-500 to-cyan-600",
         badgeColor: "bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border-blue-200 dark:border-blue-800",
         tags: ["Assessment", "Live Polling", "Feedback", "Voting"]
+      },
+      {
+        id: "cuteworld",
+        title: "Cute World",
+        category: "Gamification",
+        url: "https://ericpang.github.io/edutools_cuteworld/",
+        description: "ClassQuest virtual classroom grid with customizable student avatars, live join codes, and big-screen projector display for gamified lessons.",
+        icon: "sparkles",
+        color: "from-pink-500 to-rose-600",
+        badgeColor: "bg-pink-100 text-pink-800 dark:bg-pink-950/80 dark:text-pink-300 border-pink-200 dark:border-pink-800",
+        tags: ["Gamification", "Virtual Classroom", "Avatars", "ClassQuest"]
       }
     ];
 
@@ -993,9 +1004,29 @@
     });
 
     // ================= INITIALIZATION =================
+    function updateCategoryCounts() {
+      const counts = { all: EDU_TOOLS.length };
+      EDU_TOOLS.forEach(tool => {
+        const cat = tool.category.toLowerCase();
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+
+      const countAllEl = document.getElementById('count-all');
+      if (countAllEl) countAllEl.textContent = counts.all;
+
+      const heroCountEl = document.getElementById('hero-badge-count');
+      if (heroCountEl) heroCountEl.textContent = `${counts.all} Active Interactive Classroom Apps`;
+
+      Object.keys(counts).forEach(cat => {
+        const el = document.getElementById(`count-${cat}`);
+        if (el) el.textContent = counts[cat];
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
       loadFavorites();
+      updateCategoryCounts();
       renderGrid();
       lucide.createIcons();
     });

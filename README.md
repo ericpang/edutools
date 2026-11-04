@@ -20,6 +20,7 @@ EduTools Portal brings together individual interactive web applications into a s
 | **Mind Map** | [Mind Map App](https://ericpang.github.io/edutools_mindmap) | Ideation / Planning | Concept mapping and visual hierarchy builder for complex topics. |
 | **Spin the Wheel** | [Spin the Wheel App](https://ericpang.github.io/edutools_spinthewheel/) | Gamification | Interactive random picker and decision wheel for classroom games and student selection. |
 | **Live Poll** | [Live Poll App](https://ericpang.github.io/edutools_livepoll/) | Assessment / Feedback | Real-time polling tool for quick formative checks and audience engagement. |
+| **Cute World** | [Cute World App](https://ericpang.github.io/edutools_cuteworld/) | Gamification / Classroom | ClassQuest virtual classroom grid with student avatars, live join codes, and big screen display. |
 
 ---
 
@@ -134,6 +135,15 @@ export const tools = [
     description: "Real-time voting and instant polling tool for formative checks and quick feedback.",
     icon: "bar-chart-2",
     tags: ["Polling", "Assessment", "Audience"]
+  },
+  {
+    id: "cuteworld",
+    title: "Cute World",
+    category: "Gamification",
+    url: "https://ericpang.github.io/edutools_cuteworld/",
+    description: "ClassQuest virtual classroom grid with student avatars, live join codes, and big screen display.",
+    icon: "sparkles",
+    tags: ["Gamification", "Virtual Classroom", "Avatars", "ClassQuest"]
   }
 ];
 ```
