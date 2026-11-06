@@ -22,6 +22,7 @@ EduTools Portal brings together individual interactive web applications into a s
 | **Live Poll** | [Live Poll App](https://ericpang.github.io/edutools_livepoll/) | Assessment / Feedback | Real-time polling tool for quick formative checks and audience engagement. |
 | **Cute World** | [Cute World App](https://ericpang.github.io/edutools_cuteworld/) | Gamification / Classroom | ClassQuest virtual classroom grid with student avatars, live join codes, and big screen display. |
 | **White Board** | [White Board App](https://ericpang.github.io/edutools_whiteboard/) | Collaboration | Real-time classroom canvas for teachers and students to draw, sketch, and ideate together. |
+| **Quiz Me!** | [Quiz Me! App](https://ericpang.github.io/edutools_quizme/) | Assessment / Gamification | Live Kahoot!-style classroom quiz rewarding strategic thinking and confidence bidding. |
 
 ---
 
@@ -154,6 +155,15 @@ export const tools = [
     description: "Real-time collaborative whiteboard with short room codes and live multi-user drawing.",
     icon: "pen-tool",
     tags: ["Collaboration", "Whiteboard", "Drawing", "Real-time"]
+  },
+  {
+    id: "quizme",
+    title: "Quiz Me!",
+    category: "Assessment",
+    url: "https://ericpang.github.io/edutools_quizme/",
+    description: "Live Kahoot!-style classroom quiz that rewards confidence bidding and group collaboration.",
+    icon: "help-circle",
+    tags: ["Assessment", "Quiz", "Gamification", "Kahoot-style", "Confidence Bidding"]
   }
 ];
 ```
